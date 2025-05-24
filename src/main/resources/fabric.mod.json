@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "ferretmod",
+  "version": "${version}",
+  "name": "ferretmod",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/ferretmod/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "com.github.ollime.ferretmod.client.FerretModDataGenerator"
+    ],
+    "client": [
+      "com.github.ollime.ferretmod.client.FerretModClient"
+    ],
+    "main": [
+      "com.github.ollime.ferretmod.FerretMod"
+    ]
+  },
+  "mixins": [
+    "ferretmod.mixins.json",
+    {
+      "config": "ferretmod.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
