@@ -29,11 +29,11 @@ public class FerretEntity extends AnimalEntity {
     protected void initGoals() {
         this.goalSelector.add(0, new SwimGoal(this));
 
-        this.goalSelector.add(1, new AnimalMateGoal(this, 1.150));
-        this.goalSelector.add(2, new TemptGoal(this, 1.250, Ingredient.ofItems(Items.CHICKEN), false));
+        this.goalSelector.add(1, new AnimalMateGoal(this, 1.150D));
+        this.goalSelector.add(2, new TemptGoal(this, 1.250D, Ingredient.ofItems(Items.CHICKEN), false));
 
-        this.goalSelector.add(3, new FollowParentGoal(this, 1.10));
-        this.goalSelector.add(4, new WanderAroundFarGoal(this, 1.00));
+        this.goalSelector.add(3, new FollowParentGoal(this, 1.10D));
+        this.goalSelector.add(4, new WanderAroundFarGoal(this, 1.00D));
         this.goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 4.0F));
         this.goalSelector.add(6, new LookAroundGoal(this));
     }
@@ -41,7 +41,7 @@ public class FerretEntity extends AnimalEntity {
     public static DefaultAttributeContainer.Builder createAttributes() {
         return MobEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 10)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 18)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.35)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 20);
     }
 
