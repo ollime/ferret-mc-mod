@@ -1,4 +1,4 @@
-package com.github.ollime.ferretmod.client;
+package com.github.ollime.ferretmod;
 
 import com.github.ollime.ferretmod.entity.ModEntities;
 import com.github.ollime.ferretmod.entity.client.FerretModel;

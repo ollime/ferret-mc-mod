@@ -19,8 +19,14 @@ public class FerretModel<T extends FerretEntity> extends SinglePartEntityModel<T
     private ModelPart head;
 
     public FerretModel(ModelPart root) {
+//        this.root = root.getChild("root");
         this.ferret = root.getChild("ferret");
+        this.head = this.ferret.getChild("cube_r3");
     }
+
+//    public FerretModel(ModelPart root) {
+//        this.ferret = root.getChild("ferret");
+//    }
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();

@@ -11,21 +11,17 @@
   "environment": "*",
   "entrypoints": {
     "fabric-datagen": [
-      "com.github.ollime.ferretmod.client.FerretModDataGenerator"
-    ],
-    "client": [
-      "com.github.ollime.ferretmod.client.FerretModClient"
+      "com.github.ollime.ferretmod.FerretModDataGenerator"
     ],
     "main": [
       "com.github.ollime.ferretmod.FerretMod"
+    ],
+    "client": [
+      "com.github.ollime.ferretmod.FerretModClient"
     ]
   },
   "mixins": [
-    "ferretmod.mixins.json",
-    {
-      "config": "ferretmod.client.mixins.json",
-      "environment": "client"
-    }
+    "ferretmod.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",

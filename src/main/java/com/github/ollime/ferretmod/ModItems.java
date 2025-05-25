@@ -1,8 +1,10 @@
 package com.github.ollime.ferretmod;
 
 import com.github.ollime.ferretmod.entity.ModEntities;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemGroups;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -14,5 +16,10 @@ public class ModItems {
 
     private static Item registerItem(String name, Item item) {
         return Registry.register(Registries.ITEM, Identifier.of(FerretMod.MOD_ID, name), item);
+    }
+
+
+    public static void initialize() {
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.SPAWN_EGGS).register((itemGroup) -> itemGroup.add(ModItems.FERRET_SPAWN_EGG));
     }
 }

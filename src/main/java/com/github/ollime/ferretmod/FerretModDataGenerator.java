@@ -1,4 +1,4 @@
-package com.github.ollime.ferretmod.client;
+package com.github.ollime.ferretmod;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;

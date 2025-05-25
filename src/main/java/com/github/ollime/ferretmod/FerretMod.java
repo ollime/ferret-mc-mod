@@ -12,8 +12,10 @@ public class FerretMod implements ModInitializer {
     @Override
     public void onInitialize() {
 
-//        ModItems.initialize();
+        ModItems.initialize();
 
+        ModEntities.registerModEntities();
         FabricDefaultAttributeRegistry.register(ModEntities.FERRET, FerretEntity.createAttributes());
+
     }
 }

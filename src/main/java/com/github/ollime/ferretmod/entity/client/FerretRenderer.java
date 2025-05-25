@@ -16,7 +16,7 @@ public class FerretRenderer extends MobEntityRenderer<FerretEntity, FerretModel<
 
     @Override
     public Identifier getTexture(FerretEntity entity) {
-        return Identifier.of(FerretMod.MOD_ID, "textures/entity/mantis/mantis.png");
+        return Identifier.of(FerretMod.MOD_ID, "textures/entity/ferret/texture.png");
     }
 
     @Override
