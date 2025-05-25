@@ -20,7 +20,7 @@ public class FerretModel<T extends FerretEntity> extends SinglePartEntityModel<T
     private final ModelPart ferret;
     private final ModelPart upper_body;
     private final ModelPart headneck;
-    private final ModelPart head;
+    final ModelPart head;
     private final ModelPart neck;
     private final ModelPart right_front_leg;
     private final ModelPart left_front_leg;

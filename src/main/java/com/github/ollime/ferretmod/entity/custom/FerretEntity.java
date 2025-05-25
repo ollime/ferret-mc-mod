@@ -9,10 +9,7 @@ import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.CatEntity;
-import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.Item;
@@ -28,10 +25,16 @@ import net.minecraft.util.Hand;
 import net.minecraft.world.EntityView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import net.minecraft.entity.EquipmentSlot;
 
 public class FerretEntity extends TameableEntity {
     public final AnimationState IdleAnimationState = new AnimationState();
     private int IdleAnimationTimeout = 0;
+
+    public static ItemStack getEquippedItem(FerretEntity mob) {
+        return mob.getEquippedStack(EquipmentSlot.MAINHAND);
+    }
+
 
     public FerretEntity(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
@@ -155,6 +158,23 @@ public class FerretEntity extends TameableEntity {
         }
 
         return actionResult;
+    }
+
+    @Override
+    public boolean canEquip(ItemStack stack) {
+        EquipmentSlot equipmentSlot = this.getPreferredEquipmentSlot(stack);
+        return this.getEquippedStack(equipmentSlot).isEmpty() && equipmentSlot == EquipmentSlot.MAINHAND && super.canEquip(stack);
+    }
+
+    public static boolean canEquip(FerretEntity ferret) {
+        if (!ferret.getEquippedStack(EquipmentSlot.MAINHAND).isEmpty()) {
+            return false;
+        }
+        return ferret.getRandom().nextInt(10) == 0;
+    }
+
+    public static void equipStack(FerretEntity ferret, ItemStack stack) {
+        ferret.equipStack(EquipmentSlot.MAINHAND, stack);
     }
 
     @Override

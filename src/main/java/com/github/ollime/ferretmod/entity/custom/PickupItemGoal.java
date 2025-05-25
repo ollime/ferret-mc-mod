@@ -1,9 +1,12 @@
 package com.github.ollime.ferretmod.entity.custom;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.passive.FoxEntity;
+import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
@@ -20,7 +23,12 @@ public class PickupItemGoal extends Goal {
     @Override
     public boolean canStart() {
         // TODO: add chance
-        return !mob.getWorld().getEntitiesByClass(ItemEntity.class, mob.getBoundingBox().expand(10), item -> true).isEmpty();
+        if (FerretEntity.canEquip((FerretEntity) mob)) {
+            return !mob.getWorld().getEntitiesByClass(ItemEntity.class, mob.getBoundingBox().expand(10), item -> true).isEmpty();
+        }
+        else {
+            return false;
+        }
     }
 
     @Override
@@ -37,10 +45,12 @@ public class PickupItemGoal extends Goal {
     public void tick() {
         // range to take item
         List<ItemEntity> closeItems = mob.getWorld().getEntitiesByClass(ItemEntity.class, mob.getBoundingBox().expand(1.0), item -> true);
-        // TODO: add to inventory
-        if (!closeItems.isEmpty()) {
+        ItemStack itemStack = FerretEntity.getEquippedItem((FerretEntity) mob);
+
+        if (!closeItems.isEmpty() && itemStack.isEmpty()) {
             ItemEntity itemToPickup = closeItems.getFirst();
-            itemToPickup.remove(Entity.RemovalReason.DISCARDED);
+            FerretEntity.equipStack((FerretEntity) mob, itemToPickup.getStack());
+//            itemToPickup.remove(Entity.RemovalReason.DISCARDED);
             itemExists = !itemExists;
         }
     }

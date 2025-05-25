@@ -3,15 +3,19 @@ package com.github.ollime.ferretmod.entity.client;
 import com.github.ollime.ferretmod.FerretMod;
 import com.github.ollime.ferretmod.entity.custom.FerretEntity;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
+import net.minecraft.client.render.entity.feature.FoxHeldItemFeatureRenderer;
+import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
 public class FerretRenderer extends MobEntityRenderer<FerretEntity, FerretModel<FerretEntity>> {
     public FerretRenderer(EntityRendererFactory.Context context) {
         super(context, new FerretModel<>(context.getPart(FerretModel.FERRET)), 0.75f);
+        this.addFeature(new FerretHeldItemFeatureRenderer(this, context.getHeldItemRenderer()));
     }
 
     @Override
