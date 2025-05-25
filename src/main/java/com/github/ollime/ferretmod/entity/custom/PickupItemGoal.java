@@ -36,7 +36,7 @@ public class PickupItemGoal extends Goal {
     @Override
     public void tick() {
         // range to take item
-        List<ItemEntity> closeItems = mob.getWorld().getEntitiesByClass(ItemEntity.class, mob.getBoundingBox().expand(2.0), item -> true);
+        List<ItemEntity> closeItems = mob.getWorld().getEntitiesByClass(ItemEntity.class, mob.getBoundingBox().expand(1.0), item -> true);
         // TODO: add to inventory
         if (!closeItems.isEmpty()) {
             ItemEntity itemToPickup = closeItems.getFirst();

@@ -1,46 +1,58 @@
 package com.github.ollime.ferretmod.entity.custom;
 
 import com.github.ollime.ferretmod.entity.ModEntities;
-import net.minecraft.entity.AnimationState;
-import net.minecraft.entity.EntityType;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FoodComponent;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.PassiveEntity;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.DyeItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.DyeColor;
+import net.minecraft.util.Hand;
+import net.minecraft.world.EntityView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class FerretEntity extends AnimalEntity {
+public class FerretEntity extends TameableEntity {
     public final AnimationState IdleAnimationState = new AnimationState();
     private int IdleAnimationTimeout = 0;
 
-    public FerretEntity(EntityType<? extends AnimalEntity> entityType, World world) {
+    public FerretEntity(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
     }
 
     @Override
     protected void initGoals() {
         this.goalSelector.add(0, new SwimGoal(this));
+        this.goalSelector.add(1, new SitGoal(this));
 
-        this.goalSelector.add(1, new AnimalMateGoal(this, 1.150D));
-        this.goalSelector.add(2, new TemptGoal(this, 1.250D, Ingredient.ofItems(Items.CHICKEN), false));
+        this.goalSelector.add(2, new AnimalMateGoal(this, 1.150D));
+        this.goalSelector.add(3, new TemptGoal(this, 1.250D, Ingredient.ofItems(Items.CHICKEN), false));
 
-        this.goalSelector.add(3, new FollowParentGoal(this, 1.10D));
-        this.goalSelector.add(4, new WanderAroundFarGoal(this, 1.00D));
-        this.goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 4.0F));
-        this.goalSelector.add(6, new LookAroundGoal(this));
+        this.goalSelector.add(4, new FollowParentGoal(this, 1.10D));
+        this.goalSelector.add(5, new FollowOwnerGoal(this, 1.0, 10.0F, 5.0F));
 
-        this.goalSelector.add(7, new PickupItemGoal(this));
+        this.goalSelector.add(6, new WanderAroundFarGoal(this, 1.00D));
+        this.goalSelector.add(7, new LookAtEntityGoal(this, PlayerEntity.class, 4.0F));
+        this.goalSelector.add(8, new LookAroundGoal(this));
+
+        this.goalSelector.add(9, new PickupItemGoal(this));
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {
@@ -86,5 +98,72 @@ public class FerretEntity extends AnimalEntity {
     @Override
     protected SoundEvent getDeathSound() {
         return SoundEvents.ENTITY_FOX_DEATH;
+    }
+
+    @Override
+    public void setTamed(boolean tamed, boolean updateAttributes) {
+        super.setTamed(tamed, updateAttributes);
+    }
+
+    private void tryTame(PlayerEntity player) {
+        if (this.random.nextInt(3) == 0) {
+            this.setOwner(player);
+            this.setSitting(true);
+            this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
+        } else {
+            this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES);
+        }
+    }
+
+    @Override
+    public ActionResult interactMob(PlayerEntity player, Hand hand) {
+        ItemStack itemStack = player.getStackInHand(hand);
+        Item item = itemStack.getItem();
+        if (this.isTamed()) {
+            if (this.isOwner(player)) {
+                if (this.isBreedingItem(itemStack) && this.getHealth() < this.getMaxHealth()) {
+                    if (!this.getWorld().isClient()) {
+                        this.eat(player, hand, itemStack);
+                        FoodComponent foodComponent = itemStack.get(DataComponentTypes.FOOD);
+                        this.heal(foodComponent != null ? foodComponent.nutrition() : 1.0F);
+                    }
+
+                    return ActionResult.success(this.getWorld().isClient());
+                }
+
+                ActionResult actionResult = super.interactMob(player, hand);
+                if (!actionResult.isAccepted()) {
+                    this.setSitting(!this.isSitting());
+                    return ActionResult.success(this.getWorld().isClient());
+                }
+
+                return actionResult;
+            }
+        } else if (this.isBreedingItem(itemStack)) {
+            if (!this.getWorld().isClient()) {
+                this.eat(player, hand, itemStack);
+                this.tryTame(player);
+                this.setPersistent();
+            }
+
+            return ActionResult.success(this.getWorld().isClient());
+        }
+
+        ActionResult actionResult = super.interactMob(player, hand);
+        if (actionResult.isAccepted()) {
+            this.setPersistent();
+        }
+
+        return actionResult;
+    }
+
+    @Override
+    public EntityView method_48926() {
+        return super.getWorld();
+    }
+
+    @Override
+    public @Nullable LivingEntity getOwner() {
+        return super.getOwner();
     }
 }
