@@ -13,7 +13,7 @@ public class ModEntities {
             Registries.ENTITY_TYPE,
             Identifier.of(FerretMod.MOD_ID, "ferret"),
             EntityType.Builder.create(FerretEntity::new, SpawnGroup.CREATURE)
-                    .dimensions(1f, 2.5f).build());
+                    .dimensions(0.6f, 0.7f).build());
 
     public static void registerModEntities() {
 
