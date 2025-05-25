@@ -36,6 +36,8 @@ public class FerretEntity extends AnimalEntity {
         this.goalSelector.add(4, new WanderAroundFarGoal(this, 1.00D));
         this.goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 4.0F));
         this.goalSelector.add(6, new LookAroundGoal(this));
+
+        this.goalSelector.add(7, new PickupItemGoal(this));
     }
 
     public static DefaultAttributeContainer.Builder createAttributes() {
