@@ -31,24 +31,26 @@ public class FerretHeldItemFeatureRenderer extends FeatureRenderer<FerretEntity,
         if (bl2) {
             float m = 0.75F;
             matrixStack.scale(0.75F, 0.75F, 0.75F);
-            matrixStack.translate(0.0F, 0.5F, 0.209375F);
+            matrixStack.translate(0.0F, 0.4F, 0.209375F);
         }
 
         matrixStack.translate(this.getContextModel().head.pivotX / 16.0F, this.getContextModel().head.pivotY / 16.0F, this.getContextModel().head.pivotZ / 16.0F);
-//        float m = ferretEntity.getHeadRoll(h);
+//        float m = ferretEntity.getPitch(h);
 //        matrixStack.multiply(RotationAxis.POSITIVE_Z.rotation(m));
         matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(k));
         matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(l));
         if (ferretEntity.isBaby()) {
             if (bl) {
-                matrixStack.translate(0.4F, 0.26F, 0.15F);
+                matrixStack.translate(0.0F, 0.0F, 0.0F);
             } else {
-                matrixStack.translate(0.06F, 0.26F, -0.5F);
+                matrixStack.translate(0.0F, 1.4F, -0.9F);
             }
         } else if (bl) {
-            matrixStack.translate(0.46F, 0.26F, 0.22F);
+            matrixStack.translate(0.0F, 0.0F, 0.0F);
         } else {
-            matrixStack.translate(0.06F, 1.2F, -0.3F);
+            // y: positive = down, negative = up
+            // z: positive = closer, negative = farther
+            matrixStack.translate(0.0F, 1.4F, -0.6F);
         }
 
         matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90.0F));

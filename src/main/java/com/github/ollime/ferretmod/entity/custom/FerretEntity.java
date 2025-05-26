@@ -22,6 +22,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EntityView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -29,6 +30,9 @@ import net.minecraft.entity.EquipmentSlot;
 
 public class FerretEntity extends TameableEntity {
     public final AnimationState IdleAnimationState = new AnimationState();
+    public static final AnimationState sittingTransitionAnimationState = new AnimationState();
+    public static final AnimationState sittingAnimationState = new AnimationState();
+
     private int IdleAnimationTimeout = 0;
 
     public static ItemStack getEquippedItem(FerretEntity mob) {
@@ -57,6 +61,7 @@ public class FerretEntity extends TameableEntity {
 
         this.goalSelector.add(9, new PickupItemGoal(this));
     }
+
 
     public static DefaultAttributeContainer.Builder createAttributes() {
         return MobEntity.createMobAttributes()
@@ -112,6 +117,7 @@ public class FerretEntity extends TameableEntity {
         if (this.random.nextInt(3) == 0) {
             this.setOwner(player);
             this.setSitting(true);
+            this.setPose(EntityPose.SITTING);
             this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
         } else {
             this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES);
@@ -137,6 +143,12 @@ public class FerretEntity extends TameableEntity {
                 ActionResult actionResult = super.interactMob(player, hand);
                 if (!actionResult.isAccepted()) {
                     this.setSitting(!this.isSitting());
+                    if (this.isSitting()) {
+                        this.setPose(EntityPose.STANDING);
+                    }
+                    else {
+                        this.setPose(EntityPose.SITTING);
+                    }
                     return ActionResult.success(this.getWorld().isClient());
                 }
 
@@ -186,4 +198,5 @@ public class FerretEntity extends TameableEntity {
     public @Nullable LivingEntity getOwner() {
         return super.getOwner();
     }
+
 }
