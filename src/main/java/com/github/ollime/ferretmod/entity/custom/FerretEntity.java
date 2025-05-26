@@ -39,7 +39,6 @@ public class FerretEntity extends TameableEntity {
         return mob.getEquippedStack(EquipmentSlot.MAINHAND);
     }
 
-
     public FerretEntity(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -50,16 +49,18 @@ public class FerretEntity extends TameableEntity {
         this.goalSelector.add(1, new SitGoal(this));
 
         this.goalSelector.add(2, new AnimalMateGoal(this, 1.150D));
-        this.goalSelector.add(3, new TemptGoal(this, 1.250D, Ingredient.ofItems(Items.CHICKEN), false));
+        this.goalSelector.add(5, new TemptGoal(this, 1.250D, Ingredient.ofItems(Items.CHICKEN), false));
 
-        this.goalSelector.add(4, new FollowParentGoal(this, 1.10D));
-        this.goalSelector.add(5, new FollowOwnerGoal(this, 1.0, 10.0F, 5.0F));
+        this.goalSelector.add(4, new StashItemGoal(this));
 
-        this.goalSelector.add(6, new WanderAroundFarGoal(this, 1.00D));
-        this.goalSelector.add(7, new LookAtEntityGoal(this, PlayerEntity.class, 4.0F));
-        this.goalSelector.add(8, new LookAroundGoal(this));
+        this.goalSelector.add(5, new FollowParentGoal(this, 1.10D));
+        this.goalSelector.add(6, new FollowOwnerGoal(this, 1.0, 10.0F, 5.0F));
 
-        this.goalSelector.add(9, new PickupItemGoal(this));
+        this.goalSelector.add(7, new WanderAroundFarGoal(this, 1.00D));
+        this.goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 4.0F));
+        this.goalSelector.add(9, new LookAroundGoal(this));
+
+        this.goalSelector.add(10, new PickupItemGoal(this));
     }
 
 
@@ -197,6 +198,10 @@ public class FerretEntity extends TameableEntity {
     @Override
     public @Nullable LivingEntity getOwner() {
         return super.getOwner();
+    }
+
+    public boolean isInWarDance() {
+        return true;
     }
 
 }

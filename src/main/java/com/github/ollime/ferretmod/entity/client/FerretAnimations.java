@@ -196,4 +196,17 @@ public class FerretAnimations {
                         new Keyframe(1.5F, AnimationHelper.createRotationalVector(30.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
                 ))
                 .build();
+
+        public static final Animation WAR_DANCE = Animation.Builder.create(2.0F)
+                .looping()
+                .addBoneAnimation("head", new Transformation(Transformation.Targets.ROTATE,
+                        new Keyframe(0.0F, AnimationHelper.createRotationalVector(0.0F, getRandomRotation(), 0.0F), Transformation.Interpolations.LINEAR),
+                        new Keyframe(1.0F, AnimationHelper.createRotationalVector(0.0F, getRandomRotation(), 0.0F), Transformation.Interpolations.LINEAR),
+                        new Keyframe(2.0F, AnimationHelper.createRotationalVector(0.0F, getRandomRotation(), 0.0F), Transformation.Interpolations.LINEAR)
+                ))
+                .build();
+
+        private static float getRandomRotation() {
+                return (float) ((Math.random() - 0.5) * 180.0); // Random rotation between -90° and 90°
+        }
 }

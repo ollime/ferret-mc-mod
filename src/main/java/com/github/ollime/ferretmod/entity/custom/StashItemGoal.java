@@ -4,9 +4,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.pathing.Path;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.FoxEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
@@ -23,28 +25,24 @@ public class StashItemGoal extends Goal {
     public boolean canStart() {
         // TODO: add chance
         ItemStack item = FerretEntity.getEquippedItem((FerretEntity) mob);
-        return item != null;
+        return !item.isEmpty();
     }
 
     @Override
     public void start() {
-        // range to start
         ItemStack item = FerretEntity.getEquippedItem((FerretEntity) mob);
-        mob.getNavigation().findPathTo(mob, 10);
-        mob.dropItem(item.getItem());
     }
 
     @Override
     public void tick() {
-        // range to take item
-        List<ItemEntity> closeItems = mob.getWorld().getEntitiesByClass(ItemEntity.class, mob.getBoundingBox().expand(1.0), item -> true);
-        ItemStack itemStack = FerretEntity.getEquippedItem((FerretEntity) mob);
+        ItemStack item = FerretEntity.getEquippedItem((FerretEntity) mob);
 
-        if (!closeItems.isEmpty() && itemStack.isEmpty()) {
-            ItemEntity itemToPickup = closeItems.getFirst();
-            FerretEntity.equipStack((FerretEntity) mob, itemToPickup.getStack());
-//            itemToPickup.remove(Entity.RemovalReason.DISCARDED);
-            itemExists = !itemExists;
+        if (item == null) {
+            this.stop();
+        } else {
+            mob.dropItem(item.getItem());
+            mob.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+            this.stop(); // End the goal after dropping
         }
     }
 

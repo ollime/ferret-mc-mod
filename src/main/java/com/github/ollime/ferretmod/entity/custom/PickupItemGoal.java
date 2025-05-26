@@ -22,13 +22,12 @@ public class PickupItemGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        // TODO: add chance
         if (FerretEntity.canEquip((FerretEntity) mob)) {
-            return !mob.getWorld().getEntitiesByClass(ItemEntity.class, mob.getBoundingBox().expand(10), item -> true).isEmpty();
+            if (mob.getRandom().nextFloat() < 0.1) {
+                return !mob.getWorld().getEntitiesByClass(ItemEntity.class, mob.getBoundingBox().expand(10), item -> true).isEmpty();
+            }
         }
-        else {
-            return false;
-        }
+        return false;
     }
 
     @Override
@@ -50,7 +49,7 @@ public class PickupItemGoal extends Goal {
         if (!closeItems.isEmpty() && itemStack.isEmpty()) {
             ItemEntity itemToPickup = closeItems.getFirst();
             FerretEntity.equipStack((FerretEntity) mob, itemToPickup.getStack());
-//            itemToPickup.remove(Entity.RemovalReason.DISCARDED);
+            itemToPickup.remove(Entity.RemovalReason.DISCARDED);
             itemExists = !itemExists;
         }
     }
