@@ -209,4 +209,11 @@ public class FerretAnimations {
         private static float getRandomRotation() {
                 return (float) ((Math.random() - 0.5) * 180.0); // Random rotation between -90° and 90°
         }
+
+        public static final Animation IDLE = Animation.Builder.create(1.0F).looping()
+                .addBoneAnimation("ferret", new Transformation(Transformation.Targets.TRANSLATE,
+                        new Keyframe(0.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR),
+                        new Keyframe(1.0F, AnimationHelper.createTranslationalVector(0.0F, 0.0F, 0.0F), Transformation.Interpolations.LINEAR)
+                ))
+                .build();
 }

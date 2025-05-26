@@ -109,12 +109,10 @@ public class FerretModel<T extends FerretEntity> extends SinglePartEntityModel<T
         this.setHeadAngles(netHeadYaw, headPitch);
 
         this.animateMovement(FerretAnimations.WALKING, limbSwing, limbSwingAmount, 2f, 2.5f);
-        this.updateAnimation(entity.IdleAnimationState, FerretAnimations.WALKING, ageInTicks, 1f);
+        this.updateAnimation(entity.IdleAnimationState, FerretAnimations.IDLE, ageInTicks, 1f);
 
-        if (entity.isInSittingPose() || entity.isSitting()) {
-            this.updateAnimation(FerretEntity.sittingTransitionAnimationState, FerretAnimations.SITTING_TRANSITION, ageInTicks, 1f);
-            this.updateAnimation(FerretEntity.sittingAnimationState, FerretAnimations.SITTING, ageInTicks, 1f);
-        }
+        this.updateAnimation(entity.SittingTransitionAnimationState, FerretAnimations.SITTING_TRANSITION, ageInTicks, 1f);
+        this.updateAnimation(entity.SittingAnimationState, FerretAnimations.SITTING, ageInTicks, 0f);
 
         if(entity.isInWarDance()) {
             this.animateMovement(FerretAnimations.WAR_DANCE, limbSwing, limbSwingAmount, 2f, 2.5f);

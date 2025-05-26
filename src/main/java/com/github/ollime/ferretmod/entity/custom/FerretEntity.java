@@ -30,8 +30,8 @@ import net.minecraft.entity.EquipmentSlot;
 
 public class FerretEntity extends TameableEntity {
     public final AnimationState IdleAnimationState = new AnimationState();
-    public static final AnimationState sittingTransitionAnimationState = new AnimationState();
-    public static final AnimationState sittingAnimationState = new AnimationState();
+    public final AnimationState SittingTransitionAnimationState = new AnimationState();
+    public final AnimationState SittingAnimationState = new AnimationState();
 
     private int IdleAnimationTimeout = 0;
 
@@ -72,6 +72,17 @@ public class FerretEntity extends TameableEntity {
     }
 
     private void setupAnimationStates() {
+        if (this.isSitting()) {
+            SittingAnimationState.start(this.age);
+            this.stopMovement();
+        }
+        else {
+            SittingAnimationState.stop();
+        }
+
+        this.goalSelector.setControlEnabled(Goal.Control.MOVE, !this.isSitting());
+        this.goalSelector.setControlEnabled(Goal.Control.JUMP, !this.isSitting());
+
         if (this.IdleAnimationTimeout <= 0) {
             this.IdleAnimationTimeout = 40; // 2 second long animation = 40 ticks
             this.IdleAnimationState.start(this.age);
@@ -79,6 +90,13 @@ public class FerretEntity extends TameableEntity {
         else {
             --this.IdleAnimationTimeout;
         }
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        setupAnimationStates();
     }
 
     @Override
