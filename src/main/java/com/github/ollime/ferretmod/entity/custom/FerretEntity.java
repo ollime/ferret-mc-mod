@@ -33,11 +33,6 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.entity.EquipmentSlot;
 
 public class FerretEntity extends TameableEntity {
-    public final AnimationState IdleAnimationState = new AnimationState();
-    public final AnimationState SittingTransitionAnimationState = new AnimationState();
-    public final AnimationState SittingAnimationState = new AnimationState();
-    private int IdleAnimationTimeout = 0;
-
     private static final TrackedData<Integer> DATA_ID_TYPE_VARIANT =
             DataTracker.registerData(FerretEntity.class, TrackedDataHandlerRegistry.INTEGER);
 
@@ -57,50 +52,18 @@ public class FerretEntity extends TameableEntity {
         this.goalSelector.add(4, new TemptGoal(this, 1.250D, Ingredient.ofItems(Items.CHICKEN), false));
         this.goalSelector.add(6, new FollowParentGoal(this, 1.10D));
         this.goalSelector.add(7, new FollowOwnerGoal(this, 1.0, 10.0F, 5.0F));
-
         this.goalSelector.add(8, new StashItemGoal(this));
-
         this.goalSelector.add(9, new WanderAroundFarGoal(this, 1.00D));
         this.goalSelector.add(10, new LookAtEntityGoal(this, PlayerEntity.class, 4.0F));
         this.goalSelector.add(11, new LookAroundGoal(this));
-
         this.goalSelector.add(12, new PickupItemGoal(this));
     }
-
 
     public static DefaultAttributeContainer.Builder createAttributes() {
         return MobEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 10)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.35)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 20);
-    }
-
-    private void setupAnimationStates() {
-        if (this.isSitting()) {
-            SittingAnimationState.start(this.age);
-            this.stopMovement();
-        }
-        else {
-            SittingAnimationState.stop();
-        }
-
-        this.goalSelector.setControlEnabled(Goal.Control.MOVE, !this.isSitting());
-        this.goalSelector.setControlEnabled(Goal.Control.JUMP, !this.isSitting());
-
-        if (this.IdleAnimationTimeout <= 0) {
-            this.IdleAnimationTimeout = 40; // 2 second long animation = 40 ticks
-            this.IdleAnimationState.start(this.age);
-        }
-        else {
-            --this.IdleAnimationTimeout;
-        }
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-
-        setupAnimationStates();
     }
 
     @Override
@@ -115,7 +78,7 @@ public class FerretEntity extends TameableEntity {
         if (baby != null) {
             baby.setVariant(variant);
         }
-        return ModEntities.FERRET.create(world);
+        return baby;
     }
 
     @Nullable
@@ -144,8 +107,6 @@ public class FerretEntity extends TameableEntity {
     private void tryTame(PlayerEntity player) {
         if (this.random.nextInt(3) == 0) {
             this.setOwner(player);
-            this.setSitting(true);
-            this.setPose(EntityPose.SITTING);
             this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
         } else {
             this.getWorld().sendEntityStatus(this, EntityStatuses.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES);
@@ -170,13 +131,6 @@ public class FerretEntity extends TameableEntity {
 
                 ActionResult actionResult = super.interactMob(player, hand);
                 if (!actionResult.isAccepted()) {
-                    this.setSitting(!this.isSitting());
-                    if (this.isSitting()) {
-                        this.setPose(EntityPose.STANDING);
-                    }
-                    else {
-                        this.setPose(EntityPose.SITTING);
-                    }
                     return ActionResult.success(this.getWorld().isClient());
                 }
 
