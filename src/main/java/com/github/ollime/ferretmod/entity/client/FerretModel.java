@@ -2,10 +2,8 @@ package com.github.ollime.ferretmod.entity.client;
 
 import com.github.ollime.ferretmod.FerretMod;
 import com.github.ollime.ferretmod.entity.custom.FerretEntity;
-import com.github.ollime.ferretmod.entity.client.FerretAnimations;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.entity.animation.CamelAnimations;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
@@ -110,14 +108,8 @@ public class FerretModel<T extends FerretEntity> extends SinglePartEntityModel<T
 
         this.animateMovement(FerretAnimations.WALKING, limbSwing, limbSwingAmount, 2f, 2.5f);
         this.updateAnimation(entity.IdleAnimationState, FerretAnimations.IDLE, ageInTicks, 1f);
-
         this.updateAnimation(entity.SittingTransitionAnimationState, FerretAnimations.SITTING_TRANSITION, ageInTicks, 1f);
         this.updateAnimation(entity.SittingAnimationState, FerretAnimations.SITTING, ageInTicks, 0f);
-
-        if(entity.isInWarDance()) {
-            this.animateMovement(FerretAnimations.WAR_DANCE, limbSwing, limbSwingAmount, 2f, 2.5f);
-
-        }
     }
 
     private void setHeadAngles(float headYaw, float headPitch) {
