@@ -44,14 +44,12 @@ public class FerretEntity extends TameableEntity {
     protected void initGoals() {
         this.goalSelector.add(0, new SwimGoal(this));
         this.goalSelector.add(1, new SitGoal(this));
-
         this.goalSelector.add(2, new AnimalMateGoal(this, 1.150D));
         this.goalSelector.add(4, new TemptGoal(this, 1.250D, Ingredient.ofItems(Items.CHICKEN), false));
-
-        this.goalSelector.add(8, new StashItemGoal(this));
-
         this.goalSelector.add(6, new FollowParentGoal(this, 1.10D));
         this.goalSelector.add(7, new FollowOwnerGoal(this, 1.0, 10.0F, 5.0F));
+
+        this.goalSelector.add(8, new StashItemGoal(this));
 
         this.goalSelector.add(9, new WanderAroundFarGoal(this, 1.00D));
         this.goalSelector.add(10, new LookAtEntityGoal(this, PlayerEntity.class, 4.0F));
@@ -214,9 +212,4 @@ public class FerretEntity extends TameableEntity {
     public @Nullable LivingEntity getOwner() {
         return super.getOwner();
     }
-
-    public boolean isInWarDance() {
-        return true;
-    }
-
 }

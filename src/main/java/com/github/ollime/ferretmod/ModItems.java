@@ -18,7 +18,6 @@ public class ModItems {
         return Registry.register(Registries.ITEM, Identifier.of(FerretMod.MOD_ID, name), item);
     }
 
-
     public static void initialize() {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.SPAWN_EGGS).register((itemGroup) -> itemGroup.add(ModItems.FERRET_SPAWN_EGG));
     }
