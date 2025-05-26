@@ -49,7 +49,7 @@ public class FerretEntity extends TameableEntity {
         this.goalSelector.add(0, new SwimGoal(this));
         this.goalSelector.add(1, new SitGoal(this));
         this.goalSelector.add(2, new AnimalMateGoal(this, 1.150D));
-        this.goalSelector.add(4, new TemptGoal(this, 1.250D, Ingredient.ofItems(Items.CHICKEN), false));
+        this.goalSelector.add(4, new TemptGoal(this, 1.250D, Ingredient.ofItems(Items.CHICKEN, Items.RABBIT), false));
         this.goalSelector.add(6, new FollowParentGoal(this, 1.10D));
         this.goalSelector.add(7, new FollowOwnerGoal(this, 1.0, 10.0F, 5.0F));
         this.goalSelector.add(8, new StashItemGoal(this));
@@ -68,7 +68,7 @@ public class FerretEntity extends TameableEntity {
 
     @Override
     public boolean isBreedingItem(ItemStack stack) {
-        return stack.isOf(Items.CHICKEN);
+        return stack.isOf(Items.CHICKEN) || stack.isOf(Items.RABBIT);
     }
 
     @Override
