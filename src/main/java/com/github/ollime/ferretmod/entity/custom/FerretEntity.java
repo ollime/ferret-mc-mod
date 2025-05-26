@@ -8,19 +8,26 @@ import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.world.EntityView;
+import net.minecraft.world.LocalDifficulty;
+import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.entity.EquipmentSlot;
@@ -29,8 +36,10 @@ public class FerretEntity extends TameableEntity {
     public final AnimationState IdleAnimationState = new AnimationState();
     public final AnimationState SittingTransitionAnimationState = new AnimationState();
     public final AnimationState SittingAnimationState = new AnimationState();
-
     private int IdleAnimationTimeout = 0;
+
+    private static final TrackedData<Integer> DATA_ID_TYPE_VARIANT =
+            DataTracker.registerData(FerretEntity.class, TrackedDataHandlerRegistry.INTEGER);
 
     public static ItemStack getEquippedItem(FerretEntity mob) {
         return mob.getEquippedStack(EquipmentSlot.MAINHAND);
@@ -101,6 +110,11 @@ public class FerretEntity extends TameableEntity {
 
     @Override
     public @Nullable PassiveEntity createChild(ServerWorld world, PassiveEntity entity) {
+        FerretEntity baby = ModEntities.FERRET.create(world);
+        FerretVariant variant = Util.getRandom(FerretVariant.values(), this.random);
+        if (baby != null) {
+            baby.setVariant(variant);
+        }
         return ModEntities.FERRET.create(world);
     }
 
@@ -211,5 +225,43 @@ public class FerretEntity extends TameableEntity {
     @Override
     public @Nullable LivingEntity getOwner() {
         return super.getOwner();
+    }
+
+    @Override
+    protected void initDataTracker(DataTracker.Builder builder) {
+        super.initDataTracker(builder);
+        builder.add(DATA_ID_TYPE_VARIANT, 0);
+    }
+
+    public FerretVariant getVariant() {
+        return FerretVariant.byId(this.getTypeVariant() & 255);
+    }
+
+    private int getTypeVariant() {
+        return this.dataTracker.get(DATA_ID_TYPE_VARIANT);
+    }
+
+    private void setVariant(FerretVariant variant) {
+        this.dataTracker.set(DATA_ID_TYPE_VARIANT, variant.getId() & 255);
+    }
+
+    @Override
+    public void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
+        nbt.putInt("Variant", this.getTypeVariant());
+    }
+
+    @Override
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+        super.readCustomDataFromNbt(nbt);
+        this.dataTracker.set(DATA_ID_TYPE_VARIANT, nbt.getInt("Variant"));
+    }
+
+    @Override
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason,
+                                 @Nullable EntityData entityData) {
+        FerretVariant variant = Util.getRandom(FerretVariant.values(), this.random);
+        setVariant(variant);
+        return super.initialize(world, difficulty, spawnReason, entityData);
     }
 }
