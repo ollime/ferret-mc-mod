@@ -10,9 +10,9 @@ public enum FerretVariant {
     CHOCOLATE_WITH_WHITE(3),
     BLACK_SABLE(4),
     WHITE(5),
-    PANDA(6),
+    SILVER_PANDA(6),
     SABLE_BLAZE(7),
-    CHAMPAGNE_POINT(8);
+    CINNAMON_POINT(8);
 
     private static final FerretVariant[] BY_ID = Arrays.stream(values()).sorted(Comparator.
             comparingInt(FerretVariant::getId)).toArray(FerretVariant[]::new);

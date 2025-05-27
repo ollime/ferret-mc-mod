@@ -27,14 +27,14 @@ public class FerretRenderer extends MobEntityRenderer<FerretEntity, FerretModel<
                         Identifier.of(FerretMod.MOD_ID,"textures/entity/ferret/chocolate_with_white.png"));
                 map.put(FerretVariant.BLACK_SABLE,
                         Identifier.of(FerretMod.MOD_ID,"textures/entity/ferret/black_sable.png"));
-                map.put(FerretVariant.PANDA,
-                        Identifier.of(FerretMod.MOD_ID,"textures/entity/ferret/panda.png"));
+                map.put(FerretVariant.SILVER_PANDA,
+                        Identifier.of(FerretMod.MOD_ID,"textures/entity/ferret/silver_panda.png"));
                 map.put(FerretVariant.WHITE,
                         Identifier.of(FerretMod.MOD_ID,"textures/entity/ferret/white.png"));
                 map.put(FerretVariant.SABLE_BLAZE,
                         Identifier.of(FerretMod.MOD_ID,"textures/entity/ferret/sable_blaze.png"));
-                map.put(FerretVariant.CHAMPAGNE_POINT,
-                        Identifier.of(FerretMod.MOD_ID, "textures/entity/ferret/champagne_point.png"));
+                map.put(FerretVariant.CINNAMON_POINT,
+                        Identifier.of(FerretMod.MOD_ID, "textures/entity/ferret/cinnamon_point.png"));
             });
 
     public FerretRenderer(EntityRendererFactory.Context context) {
