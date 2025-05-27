@@ -3,11 +3,11 @@
   "id": "ferretmod",
   "version": "${version}",
   "name": "ferretmod",
-  "description": "",
+  "description": "Adds tameable ferrets to Minecraft.",
   "authors": [],
   "contact": {},
-  "license": "All-Rights-Reserved",
-  "icon": "assets/ferretmod/icon.png",
+  "license": "GNU Lesser General Public License v3.0 only",
+  "icon": "assets/ferretmod/mod_icon.png",
   "environment": "*",
   "entrypoints": {
     "fabric-datagen": [
