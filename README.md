@@ -1,5 +1,6 @@
 # Ferret Friends
 A minecraft mod that adds tameable ferrets!
+https://modrinth.com/mod/ferret-friends
 
 ### Overview
 * Spawns in forests, fields, and meadows
